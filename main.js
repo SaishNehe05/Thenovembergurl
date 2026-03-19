@@ -461,13 +461,16 @@ if (finalPayBtn) {
         finalPayBtn.disabled = true;
 
         try {
-          // 1. Insert Order
+          // Generate a friendly reference ID
+          const displayId = `#TNG-${Math.random().toString(36).toUpperCase().substring(2, 10)}`;
+
           const orderData = {
             customer_name: `${window.customerDetails.firstName} ${window.customerDetails.lastName}`,
             customer_email: window.customerDetails.email,
             total_amount: totalAmount,
             status: 'paid',
             razorpay_payment_id: response.razorpay_payment_id,
+            display_id: displayId,
             created_at: new Date().toISOString()
           };
 
@@ -514,7 +517,7 @@ if (finalPayBtn) {
 
           // Success State
           const displayOrderId = document.getElementById('display-order-id');
-          if (displayOrderId) displayOrderId.innerText = `#TNG-${orderId.toString().slice(0, 8)}`;
+          if (displayOrderId) displayOrderId.innerText = orderData.display_id;
           
           cart = [];
           updateCart();
