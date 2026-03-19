@@ -3,3 +3,12 @@ node_modules/
 dist/
 .DS_Store
 *.local
+
+# Local Assets (Migrated to Supabase)
+IMG_5950.PNG
+IMG_5951.PNG
+kalyani photo.jpeg
+kalyani-styling.png
+hero-necklace.png
+WhatsApp Image*
+gallery/
