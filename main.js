@@ -4,7 +4,7 @@ import './style.css';
 // Supabase Initialization
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const launchDateStr = import.meta.env.VITE_LAUNCH_DATE || '2026-03-19T10:00:00Z';
+const launchDateStr = import.meta.env.VITE_LAUNCH_DATE || '2026-03-19T09:30:00Z';
 
 function isLaunchDiscountActive() {
   const launchDate = new Date(launchDateStr);
