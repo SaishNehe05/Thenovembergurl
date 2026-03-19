@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" type="image/jpeg" href="/logo.jpeg">
+  <title>The November Gurl | Premium Digital Sanctuary</title>
+  <style>
+    /* Prevent initial white flash and bleed */
+    html, body { background-color: #FFFDF9; margin: 0; padding: 0; }
+  </style>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+
+<body>
+  <header id="main-header">
+    <div class="container header-content">
+      <div class="logo header-brand-centered">The November Gurl</div>
+      <nav>
+        <a href="#" class="nav-link active" data-page="home">Home</a>
+        <a href="#" class="nav-link" data-page="about">About</a>
+        <a href="#" class="nav-link" data-page="gallery">Gallery</a>
+      </nav>
+      <button id="menu-toggle" class="icon-btn mobile-only" aria-label="Toggle Menu">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+      </button>
+      <div class="header-actions">
+        <button id="cart-btn" class="icon-btn">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor"
+              d="M17,18A2,2 0 0,1 19,20A2,2 0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7A2,2 0 0,1 5,15C5,14.65 5.07,14.31 5.24,14L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z" />
+          </svg>
+          <span id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <main>
+    <!-- Home Page -->
+    <div id="page-home" class="page active">
+      <section id="hero">
+        <div class="container hero-grid">
+          <div class="hero-text animate-fade">
+            <span class="badge">A Muse's Essential</span>
+            <h1>Create beautiful product photos using just your phone</h1>
+            <p>A simple visual guide for creating clean, compelling product photos without expensive equipment.</p>
+            <div class="hero-actions">
+              <a href="#audience" class="btn btn-primary">View the Guide</a>
+            </div>
+          </div>
+          <div class="hero-visual animate-slide animate-float">
+            <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/home%20decor.jpeg"
+              alt="Dainty brass necklace styled in a lifestyle setup" class="hero-image">
+          </div>
+        </div>
+      </section>
+
+      <section id="learn" class="section-padding">
+        <div class="container">
+          <div class="section-header text-center max-width-small">
+            <span class="badge">A Simple Guide</span>
+            <h2>What You’ll Learn</h2>
+            <p>A simple step-by-step guide to help you create beautiful product photos at home using natural light and
+              just your phone.</p>
+          </div>
+
+          <div class="learn-grid">
+            <div class="learn-card animate-fade stagger-1">
+              <div class="learn-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-11.314l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                </svg>
+              </div>
+              <h3>Finding the best natural light at home</h3>
+            </div>
+
+            <div class="learn-card animate-fade stagger-2">
+              <div class="learn-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 5h16M4 19h16M12 5v14M8 5v14M16 5v14" />
+                </svg>
+              </div>
+              <h3>Simple flatlay styling techniques</h3>
+            </div>
+
+            <div class="learn-card animate-fade stagger-3">
+              <div class="learn-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 9a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path d="M15 7h-2l-1-2H10L9 7H7" />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>
+              </div>
+              <h3>How to photograph products using just your phone</h3>
+            </div>
+
+            <div class="learn-card animate-fade stagger-4">
+              <div class="learn-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="1" />
+                  <line x1="9" y1="3" x2="9" y2="21" />
+                  <line x1="15" y1="3" x2="15" y2="21" />
+                  <line x1="3" y1="9" x2="21" y2="9" />
+                  <line x1="3" y1="15" x2="21" y2="15" />
+                </svg>
+              </div>
+              <h3>Composing clean and balanced product images</h3>
+            </div>
+
+            <div class="learn-card animate-fade stagger-5">
+              <div class="learn-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path
+                    d="M12 3l1.912 5.886H20.1l-4.992 3.63 1.912 5.886-4.992-3.63L7.108 19.4l1.912-5.886-4.992-3.63h6.188L12 3z" />
+                </svg>
+              </div>
+              <h3>Editing photos for a clean, Instagram-ready finish</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Audience Section -->
+      <section id="audience" class="section-padding audience-section">
+        <div class="container">
+          <div class="audience-header text-center max-width-small">
+            <span class="badge">Who It's For</span>
+            <h2>This guide is for you if…</h2>
+          </div>
+
+          <div class="audience-grid">
+            <div class="audience-card animate-fade stagger-1">
+              <div class="audience-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </div>
+              <p>You run a small business and want better product photos</p>
+            </div>
+
+            <div class="audience-card animate-fade stagger-2">
+              <div class="audience-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <p>You create content for Instagram and want it to look more polished</p>
+            </div>
+
+            <div class="audience-card animate-fade stagger-3">
+              <div class="audience-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+                </svg>
+              </div>
+              <p>You want to learn product photography in a simple, practical way</p>
+            </div>
+
+            <div class="audience-card animate-fade stagger-4">
+              <div class="audience-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2"/>
+                  <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2"/>
+                </svg>
+              </div>
+              <p>You use your phone and want more professional-looking results</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Product Showcase Section -->
+      <section id="product-showcase" class="section-padding showcase-section">
+        <div class="container">
+          <div class="showcase-header text-center max-width-small">
+            <span class="badge">Featured Guide</span>
+            <h2>Better Product Photos Using Just Your Phone</h2>
+            <p class="showcase-author-main">— by Kalyani —</p>
+          </div>
+
+          <div class="showcase-grid-editorial">
+            <!-- Left: Guide Images -->
+            <div class="showcase-mockup animate-fade">
+              <div class="guide-images-wrap">
+                <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5951.PNG" alt="A peek inside the guide" class="guide-img-back" />
+                <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG" alt="Better Product Photos Guide Cover" class="guide-img-front" />
+              </div>
+            </div>
+
+            <!-- Right: Content -->
+            <div class="showcase-content animate-slide">
+              <p class="showcase-description">A visual guide designed to help you understand the basics of product photography — from light and styling to composition — using simple setups at home.</p>
+
+              <div class="showcase-divider"></div>
+
+              <h4 class="showcase-inside-title">What's Inside</h4>
+              <ul class="showcase-list">
+                <li><span class="showcase-check">✦</span>8–10 page visual guide</li>
+                <li><span class="showcase-check">✦</span>Simple, easy-to-follow concepts</li>
+                <li><span class="showcase-check">✦</span>Real shooting examples</li>
+                <li><span class="showcase-check">✦</span>Step-by-step guidance</li>
+                <li><span class="showcase-check">✦</span>Basic editing for a clean finish</li>
+              </ul>
+
+              <div class="showcase-divider"></div>
+
+              <div class="showcase-purchase">
+                <div class="showcase-price">₹399</div>
+                <div class="showcase-cta">
+                  <button id="showcase-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
+                  <span class="showcase-note">Delivered straight to your inbox</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- About Page -->
+    <div id="page-about" class="page" style="display: none;">
+      <section id="about" class="section-padding">
+        <div class="container split-layout">
+          <div class="content-side text-left animate-fade">
+            <h1 style="font-family: var(--font-serif);">Hi, I'm Kalyani</h1>
+            <p style="font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; font-weight: 400; opacity: 0.7; margin-top: 0.4rem; margin-bottom: 1.5rem;">Product Photographer, Stylist &amp; Visual Storyteller</p>
+            <p>I’m a product photographer with over five years of experience creating flatlays and lifestyle imagery for
+              brands. Trained as an architect and having worked as an art director in the film industry, I began
+              experimenting with product photography during the lockdown using just your phone a simple approach I still
+              love for creating clean, natural-light product images.</p>
+            <div class="social-links">
+              <a href="mailto:thenovembergurl@gmail.com" class="social-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                thenovembergurl@gmail.com
+              </a>
+              <a href="https://instagram.com/thenovembergurl" target="_blank" class="social-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                @thenovembergurl
+              </a>
+            </div>
+          </div>
+          <div class="image-side animate-slide">
+            <div class="about-image-mask">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/kalyani%20photo.jpeg" alt="Kalyani styling a flatlay setup" class="about-portrait">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Gallery Page -->
+    <div id="page-gallery" class="page" style="display: none;">
+      <section class="section-padding">
+        <div class="container">
+          <div class="showcase-header text-center" style="margin-bottom: 4rem;">
+            <span class="badge">Visuals</span>
+            <h2>Selected Works</h2>
+            <p class="showcase-author-main">— Moments in Light & Styling —</p>
+          </div>
+
+          <div class="gallery-grid">
+            <div class="gallery-item animate-fade stagger-1">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5959.JPG.jpeg" alt="Gallery Photo 1" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-2">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5966.JPG.jpeg" alt="Gallery Photo 2" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-3">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5967.JPG.jpeg" alt="Gallery Photo 3" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-4">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5969.JPG.jpeg" alt="Gallery Photo 4" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-1">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5972.JPG.jpeg" alt="Gallery Photo 5" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-2">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5974.JPG.jpeg" alt="Gallery Photo 6" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-3">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5975.JPG.jpeg" alt="Gallery Photo 7" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-4">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5976.JPG.jpeg" alt="Gallery Photo 8" loading="lazy">
+            </div>
+            <!-- New Images -->
+            <div class="gallery-item animate-fade stagger-1">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_0266.JPG.jpeg" alt="Gallery Photo 9" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-2">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_0268.JPG.jpeg" alt="Gallery Photo 10" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-3">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_0324.JPG.jpeg" alt="Gallery Photo 11" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-4">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_0871.JPG.jpeg" alt="Gallery Photo 12" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-1">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_1709.JPG.jpeg" alt="Gallery Photo 13" loading="lazy">
+            </div>
+            <div class="gallery-item animate-fade stagger-2">
+              <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_2348.JPG.jpeg" alt="Gallery Photo 14" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Checkout & Payment Pages -->
+    <div id="page-checkout-details" class="page checkout-viewport" style="display: none;">
+      <div class="container max-width-md">
+        
+        <div class="checkout-steps">
+          <div class="step active">1. Delivery Info</div>
+          <div class="step">2. Payment</div>
+        </div>
+
+        <div class="checkout-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+          
+          <!-- Left Column: Form -->
+          <div class="checkout-form-section animate-fade">
+            <h2 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 0.2rem;">Where should we send it?</h2>
+            <p style="color: var(--color-muted); margin-bottom: 1.2rem; font-size: 0.9rem;">Your guide will be delivered securely to your email.</p>
+            
+            <form id="details-form">
+              <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                  <label for="firstName" style="font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block; color: var(--color-text);">First Name</label>
+                  <input type="text" id="firstName" name="firstName" required style="width: 100%; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-sans); background: var(--color-bg); outline: none; transition: var(--transition-fast);">
+                </div>
+                <div class="form-group">
+                  <label for="lastName" style="font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block; color: var(--color-text);">Last Name</label>
+                  <input type="text" id="lastName" name="lastName" required style="width: 100%; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-sans); background: var(--color-bg); outline: none; transition: var(--transition-fast);">
+                </div>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 2.5rem;">
+                <label for="email" style="font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block; color: var(--color-text);">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required style="width: 100%; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-sans); background: var(--color-bg); outline: none; transition: var(--transition-fast);">
+                <div id="email-error-container" class="error-container"></div>
+                <small style="color: var(--color-muted); font-size: 0.8rem; margin-top: 0.5rem; display: block;">Make sure this is correct — your digital guide will be sent here immediately.</small>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">Continue to Payment</button>
+              <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem; margin-left: 0; border: none; background: transparent; color: var(--color-muted);" onclick="window.navigateTo('home')">← Back to Store</button>
+            </form>
+          </div>
+
+          <!-- Right Column: Order Summary -->
+          <div class="checkout-summary-section animate-slide" style="background: var(--color-bg); padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); box-shadow: var(--shadow-premium);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 2rem;">Order Summary</h3>
+            <div id="details-summary-items" style="margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem;">
+              <!-- JS generates items here -->
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--color-muted); font-size: 0.95rem;">
+              <span>Subtotal</span>
+              <span class="shared-subtotal">₹0.00</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--color-muted); font-size: 0.95rem;">
+              <span>Delivery</span>
+              <span style="color: var(--color-accent); font-weight: 500;">Free (Email)</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border); font-weight: 700; font-size: 1.2rem; color: var(--color-text);">
+              <span>Total</span>
+              <span class="shared-total" style="font-size: 1.5rem;">₹0.00</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="page-payment" class="page checkout-viewport" style="display: none;">
+      <div class="container max-width-md">
+        
+        <div class="checkout-steps">
+          <div class="step completed" style="cursor: pointer;" onclick="window.navigateTo('checkout-details')">✓ Delivery Info</div>
+          <div class="step active">2. Payment</div>
+        </div>
+
+        <div class="checkout-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+          
+          <div class="checkout-form-section animate-fade">
+            <h2 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 0.2rem;">Complete Order</h2>
+            <p style="color: var(--color-muted); margin-bottom: 1.2rem; font-size: 0.9rem;">Pay securely using UPI, Cards, or Netbanking via Razorpay.</p>
+            
+            <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem; text-align: center;">
+              <svg viewBox="0 0 24 24" width="48" height="48" stroke="var(--color-accent)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <h4 style="font-family: var(--font-serif); margin-bottom: 0.5rem;">Secure Checkout</h4>
+              <p style="font-size: 0.85rem; color: var(--color-muted);">This transaction is encrypted and secured by Razorpay.</p>
+            </div>
+
+            <button id="final-pay-btn" class="btn btn-primary btn-full" style="font-size: 1.1rem; padding: 1.2rem;">Pay Now securely</button>
+            <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem; margin-left: 0; border: none; background: transparent; color: var(--color-muted);" onclick="window.navigateTo('checkout-details')">← Back to Details</button>
+          </div>
+
+          <div class="checkout-summary-section animate-slide" style="background: var(--color-bg); padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); box-shadow: var(--shadow-premium);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 2rem;">Order Summary</h3>
+            <div id="payment-summary-items" style="margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem;">
+              <!-- JS generates items here -->
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--color-muted); font-size: 0.95rem;">
+              <span>Subtotal</span>
+              <span class="shared-subtotal">₹0.00</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border); font-weight: 700; font-size: 1.2rem; color: var(--color-text);">
+              <span>Total</span>
+              <span class="shared-total" style="font-size: 1.5rem;">₹0.00</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="page-success" class="page checkout-viewport" style="display: none; align-items: center; justify-content: center; text-align: center;">
+      <div class="container animate-scale" style="max-width: 500px;">
+        <div style="width: 80px; height: 80px; background: var(--color-accent-soft); color: var(--color-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+          <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h1 style="font-family: var(--font-serif); margin-bottom: 1rem;">Payment Successful!</h1>
+        <p style="color: var(--color-text); font-size: 1.1rem; margin-bottom: 2rem;">Thank you for your purchase. Please check your email inbox — your guide is on its way to you right now.</p>
+        
+        <div style="background: var(--color-bg); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px dashed var(--color-border); margin-bottom: 3rem;">
+          <span style="font-size: 0.85rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.5rem;">Order Reference</span>
+          <strong id="display-order-id" style="font-family: var(--font-sans); font-size: 1.2rem; letter-spacing: 2px;">#TNG-WAITING</strong>
+        </div>
+        
+        <button onclick="window.navigateTo('home')" class="btn btn-outline" style="margin: 0; padding: 1rem 3rem;">Return Home</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h3>Your Library Cart</h3>
+      <button id="close-cart" class="close-btn">&times;</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <!-- Cart items go here -->
+    </div>
+    <div class="cart-footer">
+      <div class="total">
+        <span>Total:</span>
+        <span id="cart-total">₹0.00</span>
+      </div>
+      <button id="checkout-btn" class="btn btn-primary btn-full">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
