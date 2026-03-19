@@ -1030,10 +1030,12 @@ main {
 .summary-item-img {
   width: 50px;
   height: 70px;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
   border-radius: var(--radius-sm);
   flex-shrink: 0;
+  background-color: var(--color-bg); /* Add a background color for the 'contain' padding */
 }
 
 .summary-item-info {

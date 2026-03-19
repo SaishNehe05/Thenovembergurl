@@ -120,7 +120,7 @@ function updateCart() {
   if (cartItemsContainer) {
     cartItemsContainer.innerHTML = cart.map((item, index) => `
       <div class="cart-item stagger-${(index % 4) + 1}" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
-        <div style="width: 60px; height: 80px; background-image: url('${item.image_url}'); background-size: cover; border-radius: var(--radius-sm);"></div>
+        <div style="width: 60px; height: 80px; background-image: url('${item.image_url}'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: var(--color-bg); border-radius: var(--radius-sm);"></div>
         <div style="flex-grow: 1;">
           <h4 style="font-size: 0.9rem; margin-bottom: 0.2rem; font-family: var(--font-serif);">${item.title}</h4>
           <span style="font-size: 0.8rem; color: var(--color-muted);">${item.quantity} x ₹${item.price}</span>
@@ -237,7 +237,7 @@ function renderCheckoutSummaries() {
   
   const itemsHtml = cart.map(item => `
     <div class="summary-item">
-      <div class="summary-item-img" style="background-image: url('${item.image_url}')"></div>
+      <div class="summary-item-img" style="background-image: url('${item.image_url}'); background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
       <div class="summary-item-info">
         <h4>${item.title}</h4>
         <p>Qty: ${item.quantity}</p>
