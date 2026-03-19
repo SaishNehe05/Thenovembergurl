@@ -467,6 +467,7 @@ if (finalPayBtn) {
             customer_email: window.customerDetails.email,
             total_amount: totalAmount,
             status: 'paid',
+            razorpay_payment_id: response.razorpay_payment_id,
             created_at: new Date().toISOString()
           };
 
