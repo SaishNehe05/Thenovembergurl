@@ -214,7 +214,7 @@ if (showcaseBuyBtn) {
         title: 'Better Product Photos Using Just Your Phone',
         price: isDiscounted ? 299 : 399,
         original_price: 399,
-        image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200&auto=format&fit=crop',
+        image_url: 'https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG',
         category: 'Guide'
       };
       
