@@ -4,6 +4,15 @@ import './style.css';
 // Supabase Initialization
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const launchDateStr = import.meta.env.VITE_LAUNCH_DATE || '2026-03-19T10:00:00Z';
+
+function isLaunchDiscountActive() {
+  const launchDate = new Date(launchDateStr);
+  const now = new Date();
+  const diffHours = (now - launchDate) / (1000 * 60 * 60);
+  return diffHours >= 0 && diffHours <= 24;
+}
+
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // EmailJS Initialization
@@ -27,9 +36,20 @@ async function fetchLibrary() {
   try {
     const { data, error } = await supabase.from('books').select('*');
     if (error) throw error;
-    dbBooks = data;
+    dbBooks = data || [];
+    
+    // Apply launch discount
+    if (isLaunchDiscountActive()) {
+      dbBooks = dbBooks.map(book => ({
+        ...book,
+        original_price: book.price,
+        price: 299
+      }));
+    }
+    
     renderLibrary();
     updateHeroButton();
+    updateShowcasePrice();
   } catch (err) {
     console.error('Error fetching books:', err);
   }
@@ -47,17 +67,34 @@ function updateHeroButton() {
 function renderLibrary() {
   if (!bookGrid || dbBooks.length === 0) return;
   
-  bookGrid.innerHTML = dbBooks.map((book, index) => `
-    <div class="book-card animate-fade stagger-${(index % 4) + 1}">
-      <div class="book-thumb" style="background-image: url('${book.image_url}'); background-size: cover; background-position: center;"></div>
-      <div class="book-info">
-        <span class="badge" style="margin-bottom: 0.5rem;">${book.category}</span>
-        <h3>${book.title}</h3>
-        <span class="price">₹${Number(book.price).toFixed(2)}</span>
-        <button onclick="addToCart('${book.id}')" class="btn btn-primary" style="margin-left: 0; width: 100%;">Add to Cart</button>
+  const isDiscounted = isLaunchDiscountActive();
+  
+  bookGrid.innerHTML = dbBooks.map((book, index) => {
+    const originalPrice = book.original_price || book.price;
+    return `
+      <div class="book-card animate-fade stagger-${(index % 4) + 1}">
+        <div class="book-thumb" style="background-image: url('${book.image_url}'); background-size: cover; background-position: center;">
+          ${isDiscounted ? '<span class="discount-badge">Launch Special</span>' : ''}
+        </div>
+        <div class="book-info">
+          <span class="badge" style="margin-bottom: 0.5rem;">${book.category}</span>
+          <h3>${book.title}</h3>
+          <div class="book-price-row">
+            <span class="price">₹${Number(book.price).toFixed(2)}</span>
+            ${isDiscounted ? `<span class="original-price">₹${Number(originalPrice).toFixed(2)}</span>` : ''}
+          </div>
+          <button onclick="addToCart('${book.id}')" class="btn btn-primary" style="margin-left: 0; width: 100%;">Add to Cart</button>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
+}
+
+function updateShowcasePrice() {
+  const showcasePrice = document.querySelector('.showcase-price');
+  if (showcasePrice && isLaunchDiscountActive()) {
+    showcasePrice.innerHTML = `₹299 <span class="original-price">₹399</span> <span class="discount-badge" style="margin-left: 0.5rem; vertical-align: middle;">Launch Special</span>`;
+  }
 }
 
 // Cart Logic
@@ -170,19 +207,20 @@ if (showcaseBuyBtn) {
       window.addToCart(guideItem.id);
     } else {
       // Fallback if DB doesn't have it explicitly matched yet
-      // This allows the UI connection to work immediately
       const tempId = 'guide-' + Date.now();
+      const isDiscounted = isLaunchDiscountActive();
       const mockGuide = {
         id: tempId,
         title: 'Better Product Photos Using Just Your Phone',
-        price: '399',
+        price: isDiscounted ? 299 : 399,
+        original_price: 399,
         image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200&auto=format&fit=crop',
         category: 'Guide'
       };
       
       cart.push({ ...mockGuide, quantity: 1 });
       updateCart();
-      toggleCart(true); // Manually open for the mock item
+      toggleCart(true);
     }
   });
 }
