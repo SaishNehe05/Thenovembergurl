@@ -2185,3 +2185,223 @@ input.input-valid {
   margin-bottom: 1rem;
 }
 
+
+/* =============================================
+   DUAL GUIDES SHOWCASE & PRODUCT CARDS
+   ============================================= */
+
+.guides-showcase-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  align-items: stretch;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.guide-card-editorial {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 3rem 2.2rem;
+  box-shadow: var(--shadow-premium);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.guide-card-editorial:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(229, 183, 183, 0.5);
+}
+
+.guide-card-editorial.highlight-pulse {
+  animation: pulseGlow 2.5s ease-out;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(229, 183, 183, 0.8); border-color: var(--color-accent); }
+  50% { box-shadow: 0 0 0 18px rgba(229, 183, 183, 0); border-color: var(--color-accent); }
+  100% { box-shadow: var(--shadow-premium); border-color: var(--color-border); }
+}
+
+.guide-card-mockup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 310px;
+  margin-bottom: 2rem;
+}
+
+.guide-card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.guide-card-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+  line-height: 1.25;
+  margin: 0.5rem 0 1rem;
+  color: var(--color-text);
+}
+
+.guide-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin-bottom: 1.5rem;
+}
+
+.guide-badge-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badge-launch {
+  background: var(--color-accent) !important;
+  color: #2D2A4A !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(212, 129, 129, 0.25) !important;
+  box-shadow: 0 2px 8px rgba(229, 183, 183, 0.35);
+}
+
+/* Styled luxury book mockup for "Can you take my picture?" */
+.book-cover-mockup {
+  width: 220px;
+  height: 300px;
+  background: linear-gradient(145deg, #FFFDF9 0%, #F5EDE6 100%);
+  border: 1px solid rgba(229, 183, 183, 0.45);
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(45, 42, 74, 0.12), -4px 0 8px rgba(0, 0, 0, 0.04);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  user-select: none;
+}
+
+.book-cover-mockup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(to right, rgba(0,0,0,0.07), transparent);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.book-cover-mockup:hover {
+  transform: translateY(-8px) rotate(1deg);
+}
+
+.cover-badge-tag {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.cover-main-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--color-text);
+  line-height: 1.3;
+  margin: 0.8rem 0 0.4rem;
+  font-weight: 700;
+}
+
+.cover-sub-text {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  line-height: 1.4;
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.cover-divider-leaf {
+  color: var(--color-accent);
+  font-size: 0.85rem;
+}
+
+.cover-author-tag {
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Work With Me Button Styles */
+.btn-work-header {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: 0.55rem 1.25rem;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-work-header:hover {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+.desktop-only {
+  display: inline-flex !important;
+  align-items: center;
+}
+
+.mobile-only-link {
+  display: none !important;
+}
+
+@media (max-width: 992px) {
+  .guides-showcase-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .guide-card-editorial {
+    padding: 2.2rem 1.6rem;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only-link {
+    display: block !important;
+  }
+  
+  .header-actions {
+    gap: 0.8rem !important;
+  }
+}
+
+/* Ensure mobile input elements don't auto-zoom on iOS */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="tel"] {
+  font-size: 16px !important;
+}

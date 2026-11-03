@@ -5,7 +5,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <link rel="icon" type="image/jpeg" href="/logo.jpeg">
-  <title>The November Gurl | Premium Digital Sanctuary</title>
+  <title>Kalyani | Lifestyle Photographer, Stylist &amp; Creator</title>
+  <meta name="description" content="Natural-light lifestyle photography and Reels for homegrown brands, by an architect-turned-art-director. Plus phone photography guides.">
+  
+  <!-- Social Share & Open Graph Meta Tags (WhatsApp, Instagram, Facebook, iMessage) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thenovembergurl.com">
+  <meta property="og:site_name" content="The November Gurl">
+  <meta property="og:title" content="Kalyani | Lifestyle Photographer, Stylist &amp; Creator">
+  <meta property="og:description" content="Natural-light lifestyle photography and Reels for homegrown brands, by an architect-turned-art-director. Plus phone photography guides.">
+  <meta property="og:image" content="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/logo.jpeg">
+  <meta property="og:image:secure_url" content="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/logo.jpeg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kalyani | Lifestyle Photographer, Stylist &amp; Creator">
+  <meta name="twitter:description" content="Natural-light lifestyle photography and Reels for homegrown brands, by an architect-turned-art-director. Plus phone photography guides.">
+  <meta name="twitter:image" content="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/logo.jpeg">
+
   <style>
     /* Prevent initial white flash and bleed */
     html, body { background-color: #FFFDF9; margin: 0; padding: 0; }
@@ -28,6 +48,7 @@
         <a href="#" class="nav-link active" data-page="home">Home</a>
         <a href="#" class="nav-link" data-page="about">About</a>
         <a href="#" class="nav-link" data-page="gallery">Gallery</a>
+        <a href="mailto:thenovembergurl@gmail.com?subject=Work%20With%20Me%20Inquiry" class="nav-link nav-work-with-me mobile-only-link">Work with me</a>
       </nav>
       <button id="menu-toggle" class="icon-btn mobile-only" aria-label="Toggle Menu">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -35,7 +56,8 @@
         </svg>
       </button>
       <div class="header-actions">
-        <button id="cart-btn" class="icon-btn">
+        <a href="mailto:thenovembergurl@gmail.com?subject=Work%20With%20Me%20Inquiry" class="btn-work-header desktop-only">Work with me</a>
+        <button id="cart-btn" class="icon-btn" aria-label="View Cart">
           <svg viewBox="0 0 24 24" width="24" height="24">
             <path fill="currentColor"
               d="M17,18A2,2 0 0,1 19,20A2,2 0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7A2,2 0 0,1 5,15C5,14.65 5.07,14.31 5.24,14L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z" />
@@ -186,46 +208,95 @@
         </div>
       </section>
 
-      <!-- Product Showcase Section -->
-      <section id="product-showcase" class="section-padding showcase-section">
+      <!-- Product Showcase Section (Both Guides) -->
+      <section id="guides-showcase" class="section-padding showcase-section">
         <div class="container">
           <div class="showcase-header text-center max-width-small">
-            <span class="badge">Featured Guide</span>
-            <h2>Better Product Photos Using Just Your Phone</h2>
-            <p class="showcase-author-main">— by Kalyani —</p>
+            <span class="badge">Curated Phone Guides</span>
+            <h2>Digital Guides by Kalyani</h2>
+            <p class="showcase-author-main">— Created with Natural Light &amp; Your Phone —</p>
           </div>
 
-          <div class="showcase-grid-editorial">
-            <!-- Left: Guide Images -->
-            <div class="showcase-mockup animate-fade">
-              <div class="guide-images-wrap">
-                <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5951.PNG" alt="A peek inside the guide" class="guide-img-back" />
-                <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG" alt="Better Product Photos Guide Cover" class="guide-img-front" />
+          <div class="guides-showcase-container">
+            <!-- Guide 1: Better Product Photos Using Just Your Phone -->
+            <div id="product-showcase" class="guide-card-editorial animate-fade">
+              <div class="guide-card-mockup">
+                <div class="guide-images-wrap">
+                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5951.PNG" alt="A peek inside the guide" class="guide-img-back" />
+                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG" alt="Better Product Photos Guide Cover" class="guide-img-front" />
+                </div>
+              </div>
+
+              <div class="guide-card-content">
+                <div class="guide-badge-row">
+                  <span class="badge">Product Photography</span>
+                </div>
+                <h3 class="guide-card-title">Better Product Photos Using Just Your Phone</h3>
+                <p class="guide-description">A visual guide designed to help you understand the basics of product photography — from light and styling to composition — using simple setups at home.</p>
+
+                <div class="showcase-divider"></div>
+
+                <h4 class="showcase-inside-title">What's Inside</h4>
+                <ul class="showcase-list">
+                  <li><span class="showcase-check">✦</span>8–10 page visual guide</li>
+                  <li><span class="showcase-check">✦</span>Simple, easy-to-follow concepts</li>
+                  <li><span class="showcase-check">✦</span>Real shooting examples</li>
+                  <li><span class="showcase-check">✦</span>Step-by-step guidance</li>
+                  <li><span class="showcase-check">✦</span>Basic editing for a clean finish</li>
+                </ul>
+
+                <div class="showcase-divider"></div>
+
+                <div class="showcase-purchase">
+                  <div class="showcase-price" id="photos-price-display">₹399</div>
+                  <div class="showcase-cta">
+                    <button id="showcase-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
+                    <span class="showcase-note">Delivered straight to your inbox</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Right: Content -->
-            <div class="showcase-content animate-slide">
-              <p class="showcase-description">A visual guide designed to help you understand the basics of product photography — from light and styling to composition — using simple setups at home.</p>
+            <!-- Guide 2: Can you take my picture? (Direct Link: #picture) -->
+            <div id="picture" class="guide-card-editorial animate-fade">
+              <div class="guide-card-mockup">
+                <div class="guide-images-wrap">
+                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/picture-guide-back.jpg" onerror="this.onerror=null; this.src='/picture-guide-back.jpg'" alt="A peek inside: Can you take my picture?" class="guide-img-back" />
+                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/picture-guide-cover.jpg" onerror="this.onerror=null; this.src='/picture-guide-cover.jpg'" alt="Can you take my picture? Guide Cover" class="guide-img-front" />
+                </div>
+              </div>
 
-              <div class="showcase-divider"></div>
+              <div class="guide-card-content">
+                <div class="guide-badge-row">
+                  <span class="badge">Portraits &amp; Lifestyle</span>
+                  <span id="picture-launch-badge" class="badge badge-launch">Launch Price · Valid till Tue 10 Nov</span>
+                </div>
+                <h3 class="guide-card-title">Can you take my picture?</h3>
+                <p style="font-family: var(--font-serif); font-size: 0.95rem; font-style: italic; color: var(--color-accent-deep); margin-top: -0.3rem; margin-bottom: 0.8rem;">— For everyone who wants to take a good picture of someone they love —</p>
+                <p class="guide-description" id="picture-card-description">A simple, heartfelt guide to capturing natural, flattering photos using just your phone. A clean lens, good light, a little room, and a few extra clicks — behind every good photo is just a little know-how.</p>
 
-              <h4 class="showcase-inside-title">What's Inside</h4>
-              <ul class="showcase-list">
-                <li><span class="showcase-check">✦</span>8–10 page visual guide</li>
-                <li><span class="showcase-check">✦</span>Simple, easy-to-follow concepts</li>
-                <li><span class="showcase-check">✦</span>Real shooting examples</li>
-                <li><span class="showcase-check">✦</span>Step-by-step guidance</li>
-                <li><span class="showcase-check">✦</span>Basic editing for a clean finish</li>
-              </ul>
+                <div class="showcase-divider"></div>
 
-              <div class="showcase-divider"></div>
+                <h4 class="showcase-inside-title">What's Inside</h4>
+                <ul class="showcase-list" id="picture-card-inside">
+                  <li><span class="showcase-check">✦</span>How to direct anyone to take a flattering photo of you</li>
+                  <li><span class="showcase-check">✦</span>Natural posing prompts — no awkward stiffness</li>
+                  <li><span class="showcase-check">✦</span>Finding flattering natural light and angles anywhere</li>
+                  <li><span class="showcase-check">✦</span>Phone camera framing, perspective &amp; composition rules</li>
+                  <li><span class="showcase-check">✦</span>Simple, clean edits for a polished finish</li>
+                </ul>
 
-              <div class="showcase-purchase">
-                <div class="showcase-price">₹399</div>
-                <div class="showcase-cta">
-                  <button id="showcase-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
-                  <span class="showcase-note">Delivered straight to your inbox</span>
+                <div class="showcase-divider"></div>
+
+                <div class="showcase-purchase">
+                  <div class="showcase-price" id="picture-price-container">
+                    <span class="current-price">₹99</span>
+                    <span class="original-price" id="picture-original-price">₹149</span>
+                  </div>
+                  <div class="showcase-cta">
+                    <button id="picture-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
+                    <span class="showcase-note">Delivered straight to your inbox</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -451,7 +522,7 @@
         
         <div style="background: var(--color-bg); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px dashed var(--color-border); margin-bottom: 3rem;">
           <span style="font-size: 0.85rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.5rem;">Order Reference</span>
-          <strong id="display-order-id" style="font-family: var(--font-sans); font-size: 1.2rem; letter-spacing: 2px;">#TNG-WAITING</strong>
+          <strong id="display-order-id" style="font-family: var(--font-sans); font-size: 1.2rem; letter-spacing: 2px;">#TNG-CONFIRMED</strong>
         </div>
         
         <button onclick="window.navigateTo('home')" class="btn btn-outline" style="margin: 0; padding: 1rem 3rem;">Return Home</button>

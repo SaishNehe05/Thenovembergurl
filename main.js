@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import './style.css';
 
-// Supabase Initialization
+// ---------------------------------------------------------------------
+// Supabase & Environment Initialization
+// ---------------------------------------------------------------------
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const launchDateStr = import.meta.env.VITE_LAUNCH_DATE || '2026-03-19T09:30:00Z';
@@ -20,8 +22,83 @@ if (window.emailjs) {
   window.emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY");
 }
 
+// ---------------------------------------------------------------------
+// Product Catalog & Dynamic Pricing Logic
+// ---------------------------------------------------------------------
+export const PRODUCTS = {
+  PRODUCT_PHOTOS: {
+    id: 'guide-product-photos',
+    title: 'Better Product Photos Using Just Your Phone',
+    price: 399,
+    original_price: 399,
+    image_url: 'https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG',
+    category: 'Guide',
+    file_path: 'Better Product Photos, just using your phone - Kalyani.pdf',
+    download_url: 'https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/Better%20Product%20Photos%2C%20just%20using%20your%20phone%20-%20Kalyani.pdf',
+    email_subject: 'Your guide is here: Better Product Photos Using Just Your Phone'
+  },
+  PICTURE_GUIDE: {
+    id: 'guide-can-you-take-my-picture',
+    title: 'Can you take my picture?',
+    regular_price: 149,
+    launch_price: 99,
+    image_url: 'https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/picture-guide-cover.jpg',
+    category: 'Guide',
+    file_path: 'Can-you-take-my-picture.pdf.pdf',
+    download_url: 'https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/Can-you-take-my-picture.pdf.pdf',
+    local_download_url: '/Can-you-take-my-picture-Kalyani.pdf',
+    email_subject: 'Your guide is here: Can you take my picture?'
+  }
+};
+
+/**
+ * Launch discount for "Can you take my picture?":
+ * Launch price: ₹99 (₹149 crossed out), valid till Tuesday 10 Nov 23:59:59 IST.
+ * Switches to ₹149 automatically on Wednesday 11 Nov 00:00:00 IST.
+ *
+ * HOW TO CHANGE MANUALLY:
+ * - To extend: Change the date below (e.g. '2026-11-15T00:00:00+05:30').
+ * - To change regular or launch price: Edit PRODUCTS.PICTURE_GUIDE above.
+ */
+const PICTURE_DISCOUNT_CUTOFF = new Date('2026-11-11T00:00:00+05:30').getTime();
+
+export function isPictureDiscountActive() {
+  return Date.now() < PICTURE_DISCOUNT_CUTOFF;
+}
+
+export function getPictureCurrentPrice() {
+  return isPictureDiscountActive() ? PRODUCTS.PICTURE_GUIDE.launch_price : PRODUCTS.PICTURE_GUIDE.regular_price;
+}
+
+function updatePicturePricingUI() {
+  const priceContainer = document.getElementById('picture-price-container');
+  const badge = document.getElementById('picture-launch-badge');
+  const isDiscount = isPictureDiscountActive();
+  const currentPrice = getPictureCurrentPrice();
+
+  if (priceContainer) {
+    if (isDiscount) {
+      priceContainer.innerHTML = `<span class="current-price">₹${currentPrice}</span> <span class="original-price" id="picture-original-price">₹${PRODUCTS.PICTURE_GUIDE.regular_price}</span>`;
+    } else {
+      priceContainer.innerHTML = `<span class="current-price">₹${currentPrice}</span>`;
+    }
+  }
+
+  if (badge) {
+    if (isDiscount) {
+      badge.style.display = 'inline-block';
+      badge.innerText = 'Launch Price · Valid till Tue 10 Nov';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+// ---------------------------------------------------------------------
+// Cart & State Management
+// ---------------------------------------------------------------------
 let cart = [];
-let dbBooks = []; // Store real books from Supabase
+let dbBooks = []; // Optional remote books from Supabase
 
 const bookGrid = document.getElementById('book-grid');
 const cartSidebar = document.getElementById('cart-sidebar');
@@ -31,113 +108,123 @@ const cartItemsContainer = document.getElementById('cart-items');
 const cartCount = document.getElementById('cart-count');
 const cartTotal = document.getElementById('cart-total');
 
-// Initialize Library from Supabase
+// Fetch Library from Supabase (if configured)
 async function fetchLibrary() {
   try {
     const { data, error } = await supabase.from('books').select('*');
-    if (error) throw error;
-    dbBooks = data || [];
-    
-    // Apply launch discount
-    if (isLaunchDiscountActive()) {
-      dbBooks = dbBooks.map(book => ({
-        ...book,
-        original_price: book.price,
-        price: 299
-      }));
+    if (!error && data && data.length > 0) {
+      dbBooks = data;
+      renderLibrary();
     }
-    
-    renderLibrary();
-    updateHeroButton();
-    updateShowcasePrice();
   } catch (err) {
-    console.error('Error fetching books:', err);
-  }
-}
-
-function updateHeroButton() {
-  const heroBtn = document.getElementById('hero-add-to-cart');
-  if (heroBtn && dbBooks.length > 0) {
-    const firstBook = dbBooks[0];
-    heroBtn.innerText = `Add to Cart - ₹${Number(firstBook.price).toFixed(2)}`;
-    heroBtn.onclick = () => window.addToCart(firstBook.id);
+    console.warn('Remote library fetch skipped or empty, using local product definitions.');
   }
 }
 
 function renderLibrary() {
   if (!bookGrid || dbBooks.length === 0) return;
-  
-  const isDiscounted = isLaunchDiscountActive();
-  
-  bookGrid.innerHTML = dbBooks.map((book, index) => {
-    const originalPrice = book.original_price || book.price;
-    return `
-      <div class="book-card animate-fade stagger-${(index % 4) + 1}">
-        <div class="book-thumb" style="background-image: url('${book.image_url}'); background-size: cover; background-position: center;">
-          ${isDiscounted ? '<span class="discount-badge">Launch Special</span>' : ''}
+  bookGrid.innerHTML = dbBooks.map((book, index) => `
+    <div class="book-card animate-fade stagger-${(index % 4) + 1}">
+      <div class="book-thumb" style="background-image: url('${book.image_url}'); background-size: cover; background-position: center;"></div>
+      <div class="book-info">
+        <span class="badge" style="margin-bottom: 0.5rem;">${book.category}</span>
+        <h3>${book.title}</h3>
+        <div class="book-price-row">
+          <span class="price">₹${Number(book.price).toFixed(2)}</span>
         </div>
-        <div class="book-info">
-          <span class="badge" style="margin-bottom: 0.5rem;">${book.category}</span>
-          <h3>${book.title}</h3>
-          <div class="book-price-row">
-            <span class="price">₹${Number(book.price).toFixed(2)}</span>
-            ${isDiscounted ? `<span class="original-price">₹${Number(originalPrice).toFixed(2)}</span>` : ''}
-          </div>
-          <button onclick="addToCart('${book.id}')" class="btn btn-primary" style="margin-left: 0; width: 100%;">Add to Cart</button>
-        </div>
+        <button onclick="addToCart('${book.id}')" class="btn btn-primary" style="margin-left: 0; width: 100%;">Add to Cart</button>
       </div>
-    `;
-  }).join('');
+    </div>
+  `).join('');
 }
 
-function updateShowcasePrice() {
-  const showcasePrice = document.querySelector('.showcase-price');
-  if (showcasePrice && isLaunchDiscountActive()) {
-    showcasePrice.innerHTML = `₹299 <span class="original-price">₹399</span> <span class="discount-badge" style="margin-left: 0.5rem; vertical-align: middle;">Launch Special</span>`;
+// Universal Add to Cart Logic
+window.addToCart = (productId) => {
+  let itemToAdd = null;
+
+  if (productId === PRODUCTS.PRODUCT_PHOTOS.id || productId === 'guide-product-photos' || productId === 'photos') {
+    const isDiscounted = isLaunchDiscountActive();
+    itemToAdd = {
+      id: PRODUCTS.PRODUCT_PHOTOS.id,
+      title: PRODUCTS.PRODUCT_PHOTOS.title,
+      price: isDiscounted ? 299 : PRODUCTS.PRODUCT_PHOTOS.price,
+      original_price: PRODUCTS.PRODUCT_PHOTOS.original_price,
+      image_url: PRODUCTS.PRODUCT_PHOTOS.image_url,
+      category: PRODUCTS.PRODUCT_PHOTOS.category,
+      file_path: PRODUCTS.PRODUCT_PHOTOS.file_path,
+      download_url: PRODUCTS.PRODUCT_PHOTOS.download_url
+    };
+  } else if (productId === PRODUCTS.PICTURE_GUIDE.id || productId === 'guide-can-you-take-my-picture' || productId === 'picture') {
+    itemToAdd = {
+      id: PRODUCTS.PICTURE_GUIDE.id,
+      title: PRODUCTS.PICTURE_GUIDE.title,
+      price: getPictureCurrentPrice(),
+      original_price: PRODUCTS.PICTURE_GUIDE.regular_price,
+      image_url: PRODUCTS.PICTURE_GUIDE.image_url,
+      category: PRODUCTS.PICTURE_GUIDE.category,
+      file_path: PRODUCTS.PICTURE_GUIDE.file_path,
+      download_url: PRODUCTS.PICTURE_GUIDE.download_url
+    };
+  } else {
+    const book = dbBooks.find(b => b.id === productId);
+    if (book) {
+      itemToAdd = { ...book };
+    }
   }
-}
 
-// Cart Logic
-window.addToCart = (uuid) => {
-  const book = dbBooks.find(b => b.id === uuid);
-  if (!book) return console.warn('Book not found in library:', uuid);
-  
-  const existing = cart.find(item => item.id === uuid);
-  
+  if (!itemToAdd) {
+    console.warn('Unknown product ID:', productId);
+    return;
+  }
+
+  const existing = cart.find(item => item.id === itemToAdd.id);
   if (existing) {
     existing.quantity += 1;
+    existing.price = itemToAdd.price; // keep active price
   } else {
-    cart.push({ ...book, quantity: 1 });
+    cart.push({ ...itemToAdd, quantity: 1 });
   }
-  
+
   updateCart();
   toggleCart(true);
 };
 
-function updateCart() {
-  if (cartCount) cartCount.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
-  
-  if (cartItemsContainer) {
-    cartItemsContainer.innerHTML = cart.map((item, index) => `
-      <div class="cart-item stagger-${(index % 4) + 1}" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
-        <div style="width: 60px; height: 80px; background-image: url('${item.image_url}'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: var(--color-bg); border-radius: var(--radius-sm);"></div>
-        <div style="flex-grow: 1;">
-          <h4 style="font-size: 0.9rem; margin-bottom: 0.2rem; font-family: var(--font-serif);">${item.title}</h4>
-          <span style="font-size: 0.8rem; color: var(--color-muted);">${item.quantity} x ₹${item.price}</span>
-        </div>
-        <button onclick="removeFromCart('${item.id}')" class="close-btn" style="font-size: 1.2rem;">&times;</button>
-      </div>
-    `).join('');
-  }
-  
-  const total = cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
-  if (cartTotal) cartTotal.innerText = `₹${total.toFixed(2)}`;
-}
-
-window.removeFromCart = (uuid) => {
-  cart = cart.filter(item => item.id !== uuid);
+window.removeFromCart = (productId) => {
+  cart = cart.filter(item => item.id !== productId);
   updateCart();
 };
+
+function updateCart() {
+  const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  if (cartCount) cartCount.innerText = totalItemsCount;
+
+  if (cartItemsContainer) {
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = `
+        <div style="text-align: center; padding: 3rem 1rem; color: var(--color-muted);">
+          <p style="font-size: 0.95rem; margin-bottom: 1rem;">Your cart is empty</p>
+          <button onclick="toggleCart(false)" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem 1rem;">Continue Browsing</button>
+        </div>
+      `;
+    } else {
+      cartItemsContainer.innerHTML = cart.map((item, index) => `
+        <div class="cart-item stagger-${(index % 4) + 1}" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
+          <div style="width: 55px; height: 75px; background-image: url('${item.image_url}'), url('/picture-guide-cover.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: var(--color-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border); flex-shrink: 0;"></div>
+          <div style="flex-grow: 1;">
+            <h4 style="font-size: 0.88rem; margin-bottom: 0.2rem; font-family: var(--font-serif); line-height: 1.3;">${item.title}</h4>
+            <span style="font-size: 0.8rem; color: var(--color-muted);">${item.quantity} × ₹${item.price}</span>
+          </div>
+          <button onclick="removeFromCart('${item.id}')" class="close-btn" style="font-size: 1.2rem; color: var(--color-muted); padding: 0.5rem;" aria-label="Remove item">&times;</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  const total = cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
+  if (cartTotal) cartTotal.innerText = `₹${total.toFixed(2)}`;
+
+  renderCheckoutSummaries();
+}
 
 function toggleCart(forceOpen = null) {
   if (!cartSidebar) return;
@@ -150,10 +237,142 @@ function toggleCart(forceOpen = null) {
   }
 }
 
+window.toggleCart = toggleCart;
+
 if (cartBtn) cartBtn.addEventListener('click', () => toggleCart());
 if (closeCart) closeCart.addEventListener('click', () => toggleCart(false));
 
-// Mobile Menu Toggle
+// Connect Buy Buttons for Both Guides
+const showcaseBuyBtn = document.getElementById('showcase-buy-btn');
+if (showcaseBuyBtn) {
+  showcaseBuyBtn.addEventListener('click', () => {
+    window.addToCart(PRODUCTS.PRODUCT_PHOTOS.id);
+  });
+}
+
+const pictureBuyBtn = document.getElementById('picture-buy-btn');
+if (pictureBuyBtn) {
+  pictureBuyBtn.addEventListener('click', () => {
+    window.addToCart(PRODUCTS.PICTURE_GUIDE.id);
+  });
+}
+
+// ---------------------------------------------------------------------
+// Navigation & Direct Link (#picture) Handling
+// ---------------------------------------------------------------------
+const navLinks = document.querySelectorAll('.nav-link');
+const pages = document.querySelectorAll('.page');
+
+window.navigateTo = (pageId) => {
+  // Mobile / Instagram in-app browser safeguard: always unlock body scrolling
+  document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
+
+  const targetPage = document.getElementById(`page-${pageId}`);
+  if (!targetPage) return;
+
+  const currentActivePage = document.querySelector('.page.active');
+
+  if (currentActivePage && currentActivePage !== targetPage) {
+    currentActivePage.classList.add('fading-out');
+    
+    setTimeout(() => {
+      currentActivePage.classList.remove('active', 'fading-out');
+      currentActivePage.style.display = 'none';
+      window.scrollTo(0, 0);
+      handleNewPage(pageId, targetPage);
+    }, 300);
+  } else if (!currentActivePage || currentActivePage !== targetPage) {
+    window.scrollTo(0, 0);
+    handleNewPage(pageId, targetPage);
+  }
+};
+
+function handleNewPage(pageId, targetPage) {
+  if (pageId.startsWith('checkout') || pageId === 'payment') {
+    renderCheckoutSummaries();
+  }
+
+  // Restore persistent order reference on the success screen
+  if (pageId === 'success') {
+    const savedOrderId = sessionStorage.getItem('tng_current_order_id') || localStorage.getItem('tng_last_order_id');
+    const displayOrderId = document.getElementById('display-order-id');
+    if (displayOrderId && savedOrderId) {
+      displayOrderId.innerText = savedOrderId;
+    }
+  }
+
+  pages.forEach(p => {
+    p.classList.remove('active', 'fading-out');
+    p.style.display = 'none';
+  });
+  navLinks.forEach(l => l.classList.remove('active'));
+
+  targetPage.style.display = '';
+  void targetPage.offsetWidth;
+  targetPage.classList.add('active');
+
+  const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+  if (activeLink) activeLink.classList.add('active');
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    const pageId = link.getAttribute('data-page');
+    if (pageId) {
+      e.preventDefault();
+      window.navigateTo(pageId);
+      if (pageId === 'home') window.location.hash = '';
+      else window.location.hash = pageId;
+    }
+  });
+});
+
+window.scrollToElement = (id) => {
+  window.navigateTo('home');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) {
+      const headerOffset = 80;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  }, 100);
+};
+
+/**
+ * Direct link handler for Instagram bio and DMs (e.g. thenovembergurl.com/#picture)
+ */
+function handleDirectHashLink() {
+  const hash = (window.location.hash || '').toLowerCase();
+  if (hash === '#picture' || hash === '#picture/') {
+    window.navigateTo('home');
+    setTimeout(() => {
+      const el = document.getElementById('picture');
+      if (el) {
+        const headerOffset = 90;
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        el.classList.add('highlight-pulse');
+        setTimeout(() => el.classList.remove('highlight-pulse'), 2500);
+      }
+    }, 200);
+  } else if (hash === '#product-showcase' || hash === '#guides-showcase') {
+    window.navigateTo('home');
+    setTimeout(() => {
+      const el = document.getElementById('product-showcase') || document.getElementById('guides-showcase');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 200);
+  }
+}
+
+window.addEventListener('hashchange', handleDirectHashLink);
+
+// Header & Mobile Nav toggles
 const menuToggle = document.getElementById('menu-toggle');
 const nav = document.querySelector('nav');
 
@@ -163,17 +382,14 @@ if (menuToggle) {
   });
 }
 
-// Close mobile menu when clicking a link
 document.querySelectorAll('nav a').forEach(link => {
   link.addEventListener('click', () => {
     if (nav && nav.classList.contains('open')) {
       nav.classList.remove('open');
-      // Subtle delay can be added here if needed, but the cross-fade mostly handles it
     }
   });
 });
 
-// Scroll effect for header
 window.addEventListener('scroll', () => {
   const header = document.getElementById('main-header');
   if (header) {
@@ -185,74 +401,53 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Checkout Logic
+// ---------------------------------------------------------------------
+// Checkout Flow & Summaries
+// ---------------------------------------------------------------------
 const checkoutBtn = document.getElementById('checkout-btn');
-const showcaseBuyBtn = document.getElementById('showcase-buy-btn');
 
 window.openCheckout = () => {
-  if (cart.length === 0) return alert('Your cart is empty');
-  window.navigateTo('checkout-details');
+  if (cart.length === 0) {
+    alert('Your cart is empty. Please add a guide first.');
+    return;
+  }
   toggleCart(false);
+  window.navigateTo('checkout-details');
 };
 
 if (checkoutBtn) checkoutBtn.addEventListener('click', window.openCheckout);
-
-// Connect Showcase Buy Button to Cart & Checkout
-if (showcaseBuyBtn) {
-  showcaseBuyBtn.addEventListener('click', () => {
-    // Check if we have the book in the remote library
-    const guideItem = dbBooks.find(b => b.title.includes('Better Product Photos'));
-    
-    if (guideItem) {
-      window.addToCart(guideItem.id);
-    } else {
-      // Fallback if DB doesn't have it explicitly matched yet
-      const tempId = 'guide-' + Date.now();
-      const isDiscounted = isLaunchDiscountActive();
-      const mockGuide = {
-        id: tempId,
-        title: 'Better Product Photos Using Just Your Phone',
-        price: isDiscounted ? 299 : 399,
-        original_price: 399,
-        image_url: 'https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG',
-        category: 'Guide'
-      };
-      
-      cart.push({ ...mockGuide, quantity: 1 });
-      updateCart();
-      toggleCart(true);
-    }
-  });
-}
 
 function renderCheckoutSummaries() {
   const detailsSummary = document.getElementById('details-summary-items');
   const paymentSummary = document.getElementById('payment-summary-items');
   const sharedTotals = document.querySelectorAll('.shared-total');
   const sharedSubtotals = document.querySelectorAll('.shared-subtotal');
-  
+
   if (!detailsSummary && !paymentSummary) return;
 
   const total = cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
-  
+
   const itemsHtml = cart.map(item => `
-    <div class="summary-item">
-      <div class="summary-item-img" style="background-image: url('${item.image_url}'); background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
-      <div class="summary-item-info">
-        <h4>${item.title}</h4>
-        <p>Qty: ${item.quantity}</p>
+    <div class="summary-item" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+      <div class="summary-item-img" style="width: 48px; height: 64px; background-image: url('${item.image_url}'), url('/picture-guide-cover.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 4px; border: 1px solid var(--color-border); flex-shrink: 0;"></div>
+      <div class="summary-item-info" style="flex-grow: 1;">
+        <h4 style="font-size: 0.9rem; margin-bottom: 0.2rem; font-family: var(--font-serif);">${item.title}</h4>
+        <p style="font-size: 0.8rem; color: var(--color-muted);">Qty: ${item.quantity} × ₹${item.price}</p>
       </div>
-      <div class="summary-item-price">₹${(Number(item.price) * item.quantity).toFixed(2)}</div>
+      <div class="summary-item-price" style="font-weight: 600; font-size: 0.95rem;">₹${(Number(item.price) * item.quantity).toFixed(2)}</div>
     </div>
   `).join('');
 
-  if (detailsSummary) detailsSummary.innerHTML = itemsHtml;
-  if (paymentSummary) paymentSummary.innerHTML = itemsHtml;
-  
+  if (detailsSummary) detailsSummary.innerHTML = itemsHtml || '<p style="color: var(--color-muted);">Cart is empty</p>';
+  if (paymentSummary) paymentSummary.innerHTML = itemsHtml || '<p style="color: var(--color-muted);">Cart is empty</p>';
+
   sharedTotals.forEach(el => el.innerText = `₹${total.toFixed(2)}`);
   sharedSubtotals.forEach(el => el.innerText = `₹${total.toFixed(2)}`);
 }
 
+// ---------------------------------------------------------------------
+// Email Validation Logic
+// ---------------------------------------------------------------------
 function validateEmailFormat(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email) return { valid: false, message: "Email is required." };
@@ -278,40 +473,26 @@ function validateEmailFormat(email) {
   return { valid: true, domain };
 }
 
-// Cache verification results to avoid repeated API calls
 const emailVerifyCache = {};
 
 async function verifyEmailDeliverability(email) {
   if (emailVerifyCache[email] !== undefined) return emailVerifyCache[email];
   const apiKey = import.meta.env.VITE_ABSTRACT_EMAIL_KEY;
-  if (!apiKey) {
-    // No API key configured — fall back to allowing through
-    return { deliverable: true };
-  }
+  if (!apiKey) return { deliverable: true };
+
   try {
     const res = await fetch(
       `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${encodeURIComponent(email)}`
     );
     const data = await res.json();
-
-    // Abstract API returns:
-    //  is_valid_format.value, is_mx_found.value, deliverability ("DELIVERABLE" / "UNDELIVERABLE" / "UNKNOWN")
-    const deliverable = data.deliverability === 'DELIVERABLE';
-    const hasMx = data.is_mx_found?.value === true;
-    const validFormat = data.is_valid_format?.value === true;
-
     const result = {
-      // Only block if the domain provably has NO mail server — avoids false positives
-      // on real emails that Abstract API marks UNDELIVERABLE (common with privacy-protected/corporate)
       deliverable: data.is_mx_found?.value !== false,
       hasMx: data.is_mx_found?.value === true,
-      deliverability: data.deliverability,
-      validFormat: data.is_valid_format?.value === true
+      deliverability: data.deliverability
     };
     emailVerifyCache[email] = result;
     return result;
   } catch {
-    // Network error — fail open so genuine users aren't blocked
     emailVerifyCache[email] = { deliverable: true };
     return { deliverable: true };
   }
@@ -344,14 +525,12 @@ function showEmailValid(container, emailInput) {
   emailInput.classList.add('input-valid');
 }
 
-// Debounced real-time check
 let verifyDebounceTimer = null;
 async function updateEmailValidationUI(email) {
   const container = document.getElementById('email-error-container');
   const emailInput = document.getElementById('email');
   if (!container || !emailInput) return;
 
-  // Always cancel any pending check first — prevents stale timers from overriding current state
   clearTimeout(verifyDebounceTimer);
 
   if (email === '') {
@@ -360,19 +539,17 @@ async function updateEmailValidationUI(email) {
     return;
   }
 
-  // Step 1: Format + typo check (instant)
   const formatResult = validateEmailFormat(email);
   if (!formatResult.valid) {
     showEmailError(container, emailInput, formatResult.message, formatResult.suggestion);
     return;
   }
 
-  // Step 2: Abstract API deliverability check (async, debounced 800ms)
   showEmailChecking(container, emailInput);
   verifyDebounceTimer = setTimeout(async () => {
     const result = await verifyEmailDeliverability(email);
     if (!result.deliverable) {
-      showEmailError(container, emailInput, `This email address doesn't appear to be deliverable. Please use a real email.`);
+      showEmailError(container, emailInput, `This email address doesn't appear deliverable. Please verify.`);
     } else {
       showEmailValid(container, emailInput);
     }
@@ -394,8 +571,7 @@ if (detailsForm) {
     e.preventDefault();
     const formData = new FormData(detailsForm);
     const data = Object.fromEntries(formData.entries());
-    
-    // Step 1: Format check (instant)
+
     const formatResult = validateEmailFormat(data.email);
     if (!formatResult.valid) {
       updateEmailValidationUI(data.email);
@@ -406,7 +582,6 @@ if (detailsForm) {
       return;
     }
 
-    // Step 2: Abstract API deliverability check
     const container = document.getElementById('email-error-container');
     const emailInput = document.getElementById('email');
     showEmailChecking(container, emailInput);
@@ -418,9 +593,8 @@ if (detailsForm) {
     if (submitBtn) submitBtn.disabled = false;
 
     if (!result.deliverable) {
-      showEmailError(container, emailInput, `This email address doesn't appear to be deliverable. Please check it and try again.`);
+      showEmailError(container, emailInput, `This email address doesn't appear deliverable. Please double-check.`);
       if (emailInput) { emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); emailInput.focus(); }
-      if (submitBtn) { submitBtn.classList.add('btn-shake'); setTimeout(() => submitBtn.classList.remove('btn-shake'), 600); }
       return;
     }
 
@@ -430,42 +604,71 @@ if (detailsForm) {
   });
 }
 
-// Real-time validation
-document.getElementById('email')?.addEventListener('input', (e) => {
-  updateEmailValidationUI(e.target.value);
-});
+document.getElementById('email')?.addEventListener('input', (e) => updateEmailValidationUI(e.target.value));
+document.getElementById('email')?.addEventListener('blur', (e) => updateEmailValidationUI(e.target.value));
 
-document.getElementById('email')?.addEventListener('blur', (e) => {
-  updateEmailValidationUI(e.target.value);
-});
-
-const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder';
-
+// ---------------------------------------------------------------------
+// Razorpay Payment & Automatic Order Fulfillment
+// ---------------------------------------------------------------------
+const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_SSOzAaR6lnZXOL';
 const finalPayBtn = document.getElementById('final-pay-btn');
+
 if (finalPayBtn) {
   finalPayBtn.addEventListener('click', () => {
     const totalAmount = cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
-    
-    if (totalAmount <= 0) return alert('Your cart is empty');
+    if (totalAmount <= 0) {
+      alert('Your cart is empty. Please add a guide first.');
+      return;
+    }
+
+    if (!window.customerDetails || !window.customerDetails.email) {
+      window.navigateTo('checkout-details');
+      return;
+    }
+
+    const itemTitles = cart.map(i => i.title).join(', ');
 
     const options = {
-      "key": razorpayKey,
-      "amount": (totalAmount * 100).toString(), // Razorpay expects paise
-      "currency": "INR",
-      "name": "The November Gurl",
-      "description": "Premium Digital Sanctuary Purchase",
-      "image": "https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/logo.jpeg",
-      "handler": async function (response) {
-        // This is the success callback
+      key: razorpayKey,
+      amount: Math.round(totalAmount * 100).toString(), // Razorpay expects paise (e.g. 9900 for ₹99)
+      currency: "INR",
+      name: "The November Gurl",
+      description: itemTitles,
+      image: "https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/logo.jpeg",
+      modal: {
+        ondismiss: function() {
+          // Mobile / Instagram safeguard: restore scroll when modal is closed
+          document.body.style.overflow = "";
+          document.documentElement.style.overflow = "";
+          finalPayBtn.innerText = 'Pay Now securely';
+          finalPayBtn.disabled = false;
+        },
+        escape: true,
+        backdropclose: false
+      },
+      handler: async function (response) {
         finalPayBtn.innerText = 'Finalizing Order...';
         finalPayBtn.disabled = true;
 
-        try {
-          // Generate a friendly reference ID
-          const displayId = `#TNG-${Math.random().toString(36).toUpperCase().substring(2, 10)}`;
+        // 1. Generate Friendly Reference ID immediately
+        const displayId = `#TNG-${Math.random().toString(36).toUpperCase().substring(2, 10)}`;
 
+        // 2. Immediately update the success screen and persist so customer NEVER sees "TNG-WAITING"
+        const displayOrderId = document.getElementById('display-order-id');
+        if (displayOrderId) displayOrderId.innerText = displayId;
+        try {
+          sessionStorage.setItem('tng_current_order_id', displayId);
+          localStorage.setItem('tng_last_order_id', displayId);
+        } catch (storageErr) {
+          console.warn('Storage unavailable:', storageErr);
+        }
+
+        const purchasedCart = [...cart];
+
+        try {
+          // 3. Create order in Supabase
           const orderData = {
-            customer_name: `${window.customerDetails.firstName} ${window.customerDetails.lastName}`,
+            customer_name: `${window.customerDetails.firstName} ${window.customerDetails.lastName}`.trim(),
             customer_email: window.customerDetails.email,
             total_amount: totalAmount,
             status: 'paid',
@@ -479,213 +682,153 @@ if (finalPayBtn) {
             .insert([orderData])
             .select();
 
-          if (orderError) throw orderError;
-          const orderId = orderResponse[0].id;
-
-          // 2. Insert Order Items (Aligned with all possible schema versions)
-          const orderItemsData = cart.map(item => ({
-            order_id: orderId,
-            product_id: item.id.toString(),
-            book_id: item.id.toString(), // Legacy support
-            product_name: item.title,
-            price: Number(item.price),
-            price_at_purchase: Number(item.price), // Legacy support
-            quantity: item.quantity,
-            image_url: item.image_url
-          }));
-
-          const { error: itemsError } = await supabase
-            .from('order_items')
-            .insert(orderItemsData);
-
-          if (itemsError) {
-            console.error('Supabase Order Items Error:', itemsError);
-            throw new Error(`Failed to save items: ${itemsError.message}`);
+          let orderId = null;
+          if (!orderError && orderResponse && orderResponse.length > 0) {
+            orderId = orderResponse[0].id;
           }
-          
-          // 3. Send Personalized Email via EmailJS
+
+          // 4. Record order items
+          if (orderId) {
+            const orderItemsData = purchasedCart.map(item => ({
+              order_id: orderId,
+              product_id: item.id.toString(),
+              book_id: item.id.toString(),
+              product_name: item.title,
+              price: Number(item.price),
+              price_at_purchase: Number(item.price),
+              quantity: item.quantity,
+              image_url: item.image_url
+            }));
+
+            await supabase.from('order_items').insert(orderItemsData);
+          }
+
+          // 5. Send automated delivery email via EmailJS
           try {
-            console.log('Attempting to send email with:', orderData.customer_email);
-            const emailResult = await sendOrderEmail(orderData, cart);
-            if (emailResult) {
-              alert("Payment successful! Your branded delivery email has been sent to " + orderData.customer_email);
-            }
+            await sendOrderEmail(orderData, purchasedCart);
           } catch (emailErr) {
-            console.error('EmailJS Send Error:', emailErr);
-            alert("Payment successful and order saved, but we couldn't send the automated email (Error: " + emailErr.text || emailErr.message || emailErr + "). Please contact support.");
+            console.error('Email delivery error:', emailErr);
           }
 
-          // Success State
-          const displayOrderId = document.getElementById('display-order-id');
-          if (displayOrderId) displayOrderId.innerText = orderData.display_id;
-          
+          // 6. Complete purchase flow
           cart = [];
           updateCart();
           window.navigateTo('success');
-          
+
         } catch (err) {
-          console.error('Payment Success Handler Error:', err);
-          alert(`Order was paid but there was an error: ${err.message}. Please contact support with your Payment ID: ${response.razorpay_payment_id}`);
+          console.error('Order Finalization Error:', err);
+          // Navigate to success anyway since payment succeeded via Razorpay
+          cart = [];
+          updateCart();
+          window.navigateTo('success');
         } finally {
-          finalPayBtn.innerText = 'Pay Now';
+          finalPayBtn.innerText = 'Pay Now securely';
           finalPayBtn.disabled = false;
         }
       },
-      "prefill": {
-        "name": `${window.customerDetails.firstName} ${window.customerDetails.lastName}`,
-        "email": window.customerDetails.email
+      prefill: {
+        name: `${window.customerDetails.firstName} ${window.customerDetails.lastName}`.trim(),
+        email: window.customerDetails.email
       },
-      "theme": { "color": "#7B5E91" } // Accent color
+      theme: { color: "#E5B7B7" } // Blush accent
     };
 
-    const rzp = new Razorpay(options);
-    rzp.on('payment.failed', function (response) {
-      alert(`Payment Failed: ${response.error.description}`);
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', function (resp) {
+      alert(`Payment was not completed: ${resp.error.description}`);
+      finalPayBtn.innerText = 'Pay Now securely';
+      finalPayBtn.disabled = false;
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     });
     rzp.open();
   });
 }
 
-// Routing Logic
-const navLinks = document.querySelectorAll('.nav-link');
-const pages = document.querySelectorAll('.page');
-
-window.navigateTo = (pageId) => {
-  // Reset overflow to fix scrolling locks (e.g. from Razorpay or other overlays)
-  document.body.style.overflow = "";
-  document.documentElement.style.overflow = "";
-
-  const targetPage = document.getElementById(`page-${pageId}`);
-  if (!targetPage) return;
-
-  const currentActivePage = document.querySelector('.page.active');
-
-  if (currentActivePage && currentActivePage !== targetPage) {
-    currentActivePage.classList.add('fading-out');
-    
-    setTimeout(() => {
-      currentActivePage.classList.remove('active', 'fading-out');
-      currentActivePage.style.display = 'none';
-      
-      // Immediate jump to top
-      window.scrollTo(0, 0);
-      handleNewPage(pageId, targetPage);
-    }, 400); // Wait for the start of the fade-out
-  } else if (!currentActivePage || currentActivePage !== targetPage) {
-    window.scrollTo(0, 0);
-    handleNewPage(pageId, targetPage);
-  }
-};
-
-function handleNewPage(pageId, targetPage) {
-  if (pageId.startsWith('checkout') || pageId === 'payment') {
-    renderCheckoutSummaries();
-  }
-
-  // Clear all states
-  pages.forEach(p => {
-    p.classList.remove('active', 'fading-out');
-    p.style.display = 'none';
-  });
-  navLinks.forEach(l => l.classList.remove('active'));
-  
-  targetPage.style.display = '';
-  // Trigger layout
-  void targetPage.offsetWidth; 
-  targetPage.classList.add('active');
-
-  const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
-  if (activeLink) activeLink.classList.add('active');
-}
-
-navLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const pageId = link.getAttribute('data-page');
-    window.navigateTo(pageId);
-    if (pageId === 'home') window.location.hash = '';
-    else window.location.hash = pageId;
-  });
-});
-
-window.scrollToElement = (id) => {
-  window.navigateTo('home');
-  setTimeout(() => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }, 100);
-};
-
-
-/**
- * Generates a unique, time-limited Supabase Storage signed URL for a file.
- * Expires in 48 hours (172800 seconds).
- * The file must exist inside the private 'guides' bucket in Supabase Storage.
- */
-async function generateSignedDownloadUrl(filePath) {
-  if (!filePath) return null;
-  try {
-    const { data, error } = await supabase.storage
-      .from('book')
-      .createSignedUrl(filePath, 172800); // 48 hours in seconds
-    if (error) {
-      console.error('Signed URL error:', error.message);
-      return null;
-    }
-    return data.signedUrl;
-  } catch (err) {
-    console.error('Failed to generate signed URL:', err);
-    return null;
-  }
-}
-
+// ---------------------------------------------------------------------
+// Automated Email Delivery with Custom Subjects & Specific PDF Links
+// ---------------------------------------------------------------------
 async function sendOrderEmail(orderData, cartItems) {
   if (!window.emailjs) {
-    console.error('EmailJS not loaded');
-    return;
+    console.error('EmailJS not available');
+    return false;
   }
 
   const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 
-  // Combine product titles for the email
-  const productNames = cartItems.map(item => item.title).join(', ');
-  
-  const firstItem = cartItems[0];
-  let downloadLink = 'https://thenovembergurl.com/library'; // default fallback
+  const hasPhotos = cartItems.some(i => i.id === PRODUCTS.PRODUCT_PHOTOS.id || i.title.includes('Better Product Photos'));
+  const hasPicture = cartItems.some(i => i.id === PRODUCTS.PICTURE_GUIDE.id || i.title.includes('Can you take my picture'));
 
-  if (firstItem?.title?.includes('Better Product Photos')) {
-    // Verified public URL for the guide
-    downloadLink = `https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/${encodeURIComponent(firstItem.file_path || 'Better Product Photos, just using your phone - Kalyani.pdf')}`;
-  } else if (firstItem?.file_path) {
-    const signedUrl = await generateSignedDownloadUrl(firstItem.file_path);
-    if (signedUrl) downloadLink = signedUrl;
-  } else {
-    // Final fallback
-    downloadLink = firstItem?.download_url || 'https://thenovembergurl.com/library';
+  // Email subject line tailored to the exact purchase
+  let emailSubject = 'Your guide is here: The November Gurl';
+  if (hasPicture && !hasPhotos) {
+    emailSubject = 'Your guide is here: Can you take my picture?';
+  } else if (hasPhotos && !hasPicture) {
+    emailSubject = 'Your guide is here: Better Product Photos Using Just Your Phone';
+  } else if (hasPhotos && hasPicture) {
+    emailSubject = 'Your guides are here: Can you take my picture? & Better Product Photos';
   }
+
+  // Download links for each guide
+  const photosUrl = PRODUCTS.PRODUCT_PHOTOS.download_url;
+  const pictureUrl = PRODUCTS.PICTURE_GUIDE.download_url;
+
+  let downloadLinkText = '';
+  let downloadButtonsHtml = '';
+
+  if (hasPicture && !hasPhotos) {
+    downloadLinkText = pictureUrl;
+    downloadButtonsHtml = `<a href="${pictureUrl}" target="_blank" style="display: inline-block; padding: 15px 36px; background-color: #E5B7B7; color: #2D2A4A; text-decoration: none; font-weight: 600; border-radius: 30px; font-size: 15px; border: 1px solid #D48181;">✦ Download Guide: Can you take my picture?</a>`;
+  } else if (hasPhotos && !hasPicture) {
+    downloadLinkText = photosUrl;
+    downloadButtonsHtml = `<a href="${photosUrl}" target="_blank" style="display: inline-block; padding: 15px 36px; background-color: #E5B7B7; color: #2D2A4A; text-decoration: none; font-weight: 600; border-radius: 30px; font-size: 15px; border: 1px solid #D48181;">✦ Download Guide: Better Product Photos</a>`;
+  } else {
+    downloadLinkText = pictureUrl;
+    downloadButtonsHtml = `
+      <div style="margin-bottom: 12px;">
+        <a href="${pictureUrl}" target="_blank" style="display: inline-block; padding: 14px 30px; background-color: #E5B7B7; color: #2D2A4A; text-decoration: none; font-weight: 600; border-radius: 30px; font-size: 14px; border: 1px solid #D48181;">✦ Download: Can you take my picture?</a>
+      </div>
+      <div>
+        <a href="${photosUrl}" target="_blank" style="display: inline-block; padding: 14px 30px; background-color: #E5B7B7; color: #2D2A4A; text-decoration: none; font-weight: 600; border-radius: 30px; font-size: 14px; border: 1px solid #D48181;">✦ Download: Better Product Photos</a>
+      </div>
+    `;
+  }
+
+  const productNames = cartItems.map(item => item.title).join(', ');
 
   const templateParams = {
     to_email: orderData.customer_email,
     to_name: orderData.customer_name,
     customer_name: orderData.customer_name,
     customer_email: orderData.customer_email,
+    subject: emailSubject,
+    email_subject: emailSubject,
     product_name: productNames,
-    download_link: downloadLink,
-    order_id: `TNG-${Date.now().toString().slice(-6)}`,
-    logo_url: "https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/logo.jpeg" // Expected public URL
+    download_link: downloadLinkText,
+    download_link_raw: downloadLinkText.replace(/^https?:\/\//, ''),
+    download_buttons_html: downloadButtonsHtml,
+    download_link_picture: pictureUrl,
+    download_link_photos: photosUrl,
+    order_id: orderData.display_id,
+    display_id: orderData.display_id,
+    logo_url: "https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/logo.jpeg"
   };
 
   try {
     const result = await window.emailjs.send(serviceId, templateId, templateParams);
-    console.log('EmailJS Success:', result);
+    console.log('EmailJS delivery success:', result);
     return true;
   } catch (error) {
-    console.error('EmailJS Error Object:', error);
-    throw error;
+    console.error('EmailJS delivery failed:', error);
+    return false;
   }
 }
 
-// Initialize
+// ---------------------------------------------------------------------
+// Application Initialization
+// ---------------------------------------------------------------------
+updatePicturePricingUI();
 fetchLibrary();
 updateCart();
+handleDirectHashLink();
