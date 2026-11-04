@@ -2496,6 +2496,15 @@ input.input-valid {
     gap: 3rem;
   }
 
+  /* Display new launch guide 'Can you take my picture?' first on mobile */
+  #picture {
+    order: 1;
+  }
+
+  #product-showcase {
+    order: 2;
+  }
+
   .guide-card-editorial {
     padding: 2.2rem 1.6rem;
   }
