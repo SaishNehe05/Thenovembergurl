@@ -86,17 +86,25 @@
       <section id="hero">
         <div class="container hero-grid">
           <div class="hero-text animate-fade">
-            <span class="badge">Phone Photography Guides · By Kalyani</span>
-            <h1>Take better photos with just your phone</h1>
-            <p>Simple, practical visual guides to natural-light phone photography — whether you want to capture someone you love, or create aesthetic product imagery for your brand.</p>
+            <span class="badge">New Release · Phone Photography Guide</span>
+            <h1>Can you take my picture?</h1>
+            <p class="hero-quote"
+              style="font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; color: var(--color-accent-deep); margin-top: -0.5rem; margin-bottom: 1.2rem;">
+              “Yes, I can.” — For everyone who wants to take a good picture of someone they love.</p>
+            <p>A simple, practical guide to natural-light phone photography by Kalyani. Learn how to direct, find flattering light, and capture natural, candid portraits using just your phone — no fancy gear or awkward stiffness.</p>
             <div class="hero-actions" style="display: flex; gap: 0.9rem; flex-wrap: wrap; align-items: center;">
-              <a href="#guides-showcase" class="btn btn-primary">View the Guides</a>
-              <a href="#picture" class="btn btn-outline" style="border-color: var(--color-accent); color: var(--color-accent-deep);">New: Portrait Guide (₹99)</a>
+              <a href="#picture" class="btn btn-primary">Get the Guide — ₹99</a>
+              <a href="#guides-showcase" class="btn btn-outline">Explore All Guides</a>
             </div>
           </div>
           <div class="hero-visual animate-slide animate-float">
-            <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/home%20decor.jpeg"
-              alt="Natural light lifestyle and product photography" class="hero-image">
+            <div class="hero-book-wrap">
+              <img
+                src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/book/picture-guide-cover.jpg"
+                onerror="this.onerror=null; this.src='/picture-guide-cover.jpg'"
+                alt="Can you take my picture? Phone Photography Guide by Kalyani" class="hero-guide-cover" />
+              <span class="hero-book-tag">Launch Price · ₹99</span>
+            </div>
           </div>
         </div>
       </section>
@@ -104,9 +112,9 @@
       <section id="learn" class="section-padding">
         <div class="container">
           <div class="section-header text-center max-width-small">
-            <span class="badge">The Secret Behind Great Photos</span>
-            <h2>What You’ll Learn Inside the Guides</h2>
-            <p>No expensive gear or technical jargon. Simple, practical techniques to help you capture flattering portraits and clean product setups at home and outdoors.</p>
+            <span class="badge">Inside The Guide</span>
+            <h2>What You’ll Learn Inside</h2>
+            <p>Behind every good photo is just a little know-how. Simple, practical techniques to help you capture flattering, natural portraits using just your phone.</p>
           </div>
 
           <div class="learn-grid">
@@ -132,6 +140,16 @@
 
             <div class="learn-card animate-fade stagger-3">
               <div class="learn-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2" />
+                </svg>
+              </div>
+              <h3>How to direct anyone to take a flattering photo of you</h3>
+            </div>
+
+            <div class="learn-card animate-fade stagger-4">
+              <div class="learn-icon">
                 <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
                   <path d="M3 9a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                   <path d="M15 7h-2l-1-2H10L9 7H7" />
@@ -139,15 +157,6 @@
                 </svg>
               </div>
               <h3>Phone camera angles, framing &amp; perspective secrets</h3>
-            </div>
-
-            <div class="learn-card animate-fade stagger-4">
-              <div class="learn-icon">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M4 5h16M4 19h16M12 5v14M8 5v14M16 5v14" />
-                </svg>
-              </div>
-              <h3>Simple flatlay styling &amp; clean product composition</h3>
             </div>
 
             <div class="learn-card animate-fade stagger-5">
@@ -167,8 +176,8 @@
       <section id="audience" class="section-padding audience-section">
         <div class="container">
           <div class="audience-header text-center max-width-small">
-            <span class="badge">Who They're For</span>
-            <h2>These guides are for you if…</h2>
+            <span class="badge">Who It's For</span>
+            <h2>This guide is for you if…</h2>
           </div>
 
           <div class="audience-grid">
@@ -180,18 +189,19 @@
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               </div>
-              <p>You want to take flattering, natural photos of someone you love (or direct them to photograph you)</p>
+              <p>You want to take flattering, natural photos of someone you love (partner, friends, or family)</p>
             </div>
 
             <div class="audience-card animate-fade stagger-2">
               <div class="audience-icon">
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                  <polyline points="9 22 9 12 15 12 15 22" />
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
                 </svg>
               </div>
-              <p>You run a homegrown brand or small business and want aesthetic product photos</p>
+              <p>You ask people “Can you take my picture?” but always end up with stiff, unflattering photos</p>
             </div>
 
             <div class="audience-card animate-fade stagger-3">
@@ -203,7 +213,7 @@
                   <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
                 </svg>
               </div>
-              <p>You create content for Instagram and want everyday moments to look warm and polished</p>
+              <p>You want your everyday memories, trips, and Instagram moments to look warm, polished, and aesthetic</p>
             </div>
 
             <div class="audience-card animate-fade stagger-4">
@@ -214,7 +224,7 @@
                   <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2" />
                 </svg>
               </div>
-              <p>You use your phone and want practical tips that deliver instant, noticeable results</p>
+              <p>You use just your phone and want practical know-how that delivers instant, noticeable results</p>
             </div>
           </div>
         </div>
@@ -224,55 +234,13 @@
       <section id="guides-showcase" class="section-padding showcase-section">
         <div class="container">
           <div class="showcase-header text-center max-width-small">
-            <span class="badge">Curated Phone Guides</span>
-            <h2>Digital Guides by Kalyani</h2>
+            <span class="badge">Digital Library</span>
+            <h2>Guides by Kalyani</h2>
             <p class="showcase-author-main">— Created with Natural Light &amp; Your Phone —</p>
           </div>
 
           <div class="guides-showcase-container">
-            <!-- Guide 1: Better Product Photos Using Just Your Phone -->
-            <div id="product-showcase" class="guide-card-editorial animate-fade">
-              <div class="guide-card-mockup">
-                <div class="guide-images-wrap">
-                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5951.PNG"
-                    alt="A peek inside the guide" class="guide-img-back" />
-                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG"
-                    alt="Better Product Photos Guide Cover" class="guide-img-front" />
-                </div>
-              </div>
-
-              <div class="guide-card-content">
-                <div class="guide-badge-row">
-                  <span class="badge">Product Photography</span>
-                </div>
-                <h3 class="guide-card-title">Better Product Photos Using Just Your Phone</h3>
-                <p class="guide-description">A visual guide designed to help you understand the basics of product
-                  photography — from light and styling to composition — using simple setups at home.</p>
-
-                <div class="showcase-divider"></div>
-
-                <h4 class="showcase-inside-title">What's Inside</h4>
-                <ul class="showcase-list">
-                  <li><span class="showcase-check">✦</span>8–10 page visual guide</li>
-                  <li><span class="showcase-check">✦</span>Simple, easy-to-follow concepts</li>
-                  <li><span class="showcase-check">✦</span>Real shooting examples</li>
-                  <li><span class="showcase-check">✦</span>Step-by-step guidance</li>
-                  <li><span class="showcase-check">✦</span>Basic editing for a clean finish</li>
-                </ul>
-
-                <div class="showcase-divider"></div>
-
-                <div class="showcase-purchase">
-                  <div class="showcase-price" id="photos-price-display">₹399</div>
-                  <div class="showcase-cta">
-                    <button id="showcase-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
-                    <span class="showcase-note">Delivered straight to your inbox</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Guide 2: Can you take my picture? (Direct Link: #picture) -->
+            <!-- Guide 1: Can you take my picture? (DISPLAYED 1ST) -->
             <div id="picture" class="guide-card-editorial animate-fade">
               <div class="guide-card-mockup">
                 <div class="guide-images-wrap">
@@ -321,6 +289,48 @@
                   </div>
                   <div class="showcase-cta">
                     <button id="picture-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
+                    <span class="showcase-note">Delivered straight to your inbox</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Guide 2: Better Product Photos Using Just Your Phone -->
+            <div id="product-showcase" class="guide-card-editorial animate-fade">
+              <div class="guide-card-mockup">
+                <div class="guide-images-wrap">
+                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5951.PNG"
+                    alt="A peek inside the guide" class="guide-img-back" />
+                  <img src="https://uwegkwbqxeqrvxryxtsf.supabase.co/storage/v1/object/public/images/IMG_5950.PNG"
+                    alt="Better Product Photos Guide Cover" class="guide-img-front" />
+                </div>
+              </div>
+
+              <div class="guide-card-content">
+                <div class="guide-badge-row">
+                  <span class="badge">Product Photography</span>
+                </div>
+                <h3 class="guide-card-title">Better Product Photos Using Just Your Phone</h3>
+                <p class="guide-description">A visual guide designed to help you understand the basics of product
+                  photography — from light and styling to composition — using simple setups at home.</p>
+
+                <div class="showcase-divider"></div>
+
+                <h4 class="showcase-inside-title">What's Inside</h4>
+                <ul class="showcase-list">
+                  <li><span class="showcase-check">✦</span>8–10 page visual guide</li>
+                  <li><span class="showcase-check">✦</span>Simple, easy-to-follow concepts</li>
+                  <li><span class="showcase-check">✦</span>Real shooting examples</li>
+                  <li><span class="showcase-check">✦</span>Step-by-step guidance</li>
+                  <li><span class="showcase-check">✦</span>Basic editing for a clean finish</li>
+                </ul>
+
+                <div class="showcase-divider"></div>
+
+                <div class="showcase-purchase">
+                  <div class="showcase-price" id="photos-price-display">₹399</div>
+                  <div class="showcase-cta">
+                    <button id="showcase-buy-btn" class="btn btn-primary showcase-btn">Add to Cart</button>
                     <span class="showcase-note">Delivered straight to your inbox</span>
                   </div>
                 </div>
