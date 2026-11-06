@@ -300,6 +300,10 @@ function handleNewPage(pageId, targetPage) {
     if (displayOrderId && savedOrderId) {
       displayOrderId.innerText = savedOrderId;
     }
+    try {
+      const savedCart = JSON.parse(sessionStorage.getItem('tng_purchased_cart') || localStorage.getItem('tng_purchased_cart') || '[]');
+      if (savedCart.length) renderSuccessDownloads(savedCart);
+    } catch (_) {}
   }
 
   pages.forEach(p => {
@@ -664,6 +668,11 @@ if (finalPayBtn) {
         }
 
         const purchasedCart = [...cart];
+        try {
+          sessionStorage.setItem('tng_purchased_cart', JSON.stringify(purchasedCart));
+          localStorage.setItem('tng_purchased_cart', JSON.stringify(purchasedCart));
+          renderSuccessDownloads(purchasedCart);
+        } catch (_) {}
 
         try {
           // 3. Create order in Supabase
@@ -743,6 +752,33 @@ if (finalPayBtn) {
     });
     rzp.open();
   });
+}
+
+// ---------------------------------------------------------------------
+// Instant One-Click Download UI on Order Success Page
+// ---------------------------------------------------------------------
+function renderSuccessDownloads(cartItems) {
+  const container = document.getElementById('success-download-container');
+  if (!container || !cartItems || !cartItems.length) return;
+
+  container.innerHTML = `
+    <div style="background: rgba(229, 183, 183, 0.15); border: 1px solid rgba(229, 183, 183, 0.45); border-radius: var(--radius-md); padding: 1.5rem 1.8rem; margin-bottom: 2rem; text-align: center;">
+      <h3 style="font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 0.4rem; color: var(--color-text);">Your Download is Ready!</h3>
+      <p style="font-size: 0.88rem; color: var(--color-muted); margin-bottom: 1.3rem;">Tap below to save your guide directly to this device right now:</p>
+      ${cartItems.map(item => {
+        let downloadUrl = PRODUCTS.PICTURE_GUIDE.download_url;
+        if (item.id === PRODUCTS.PRODUCT_PHOTOS.id || (item.title && item.title.includes('Better Product Photos'))) {
+          downloadUrl = PRODUCTS.PRODUCT_PHOTOS.download_url;
+        }
+        return `
+          <a href="${downloadUrl}" target="_blank" download class="btn btn-primary btn-full" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.95rem; padding: 1rem 1.4rem; text-decoration: none; border-radius: 30px; box-shadow: 0 8px 20px rgba(229, 183, 183, 0.35);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download "${item.title}" (PDF)
+          </a>
+        `;
+      }).join('')}
+    </div>
+  `;
 }
 
 // ---------------------------------------------------------------------
