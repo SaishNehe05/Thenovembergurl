@@ -73,6 +73,8 @@ export function getPictureCurrentPrice() {
 function updatePicturePricingUI() {
   const priceContainer = document.getElementById('picture-price-container');
   const badge = document.getElementById('picture-launch-badge');
+  const heroPriceDisplay = document.getElementById('hero-price-display');
+  const heroBookTag = document.getElementById('hero-book-tag');
   const isDiscount = isPictureDiscountActive();
   const currentPrice = getPictureCurrentPrice();
 
@@ -87,9 +89,23 @@ function updatePicturePricingUI() {
   if (badge) {
     if (isDiscount) {
       badge.style.display = 'inline-block';
-      badge.innerText = 'Launch Price · Valid till Tue 10 Nov';
+      badge.innerText = 'Launch Price · Limited Time Offer';
     } else {
       badge.style.display = 'none';
+    }
+  }
+
+  if (heroPriceDisplay) {
+    heroPriceDisplay.innerText = `₹${currentPrice}`;
+  }
+
+  if (heroBookTag) {
+    if (isDiscount) {
+      heroBookTag.style.display = 'inline-block';
+      heroBookTag.innerText = `Launch Price · ₹${currentPrice}`;
+    } else {
+      heroBookTag.style.display = 'inline-block';
+      heroBookTag.innerText = `Digital Guide · ₹${currentPrice}`;
     }
   }
 }
