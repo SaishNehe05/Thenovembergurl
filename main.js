@@ -53,14 +53,14 @@ export const PRODUCTS = {
 
 /**
  * Launch discount for "Can you take my picture?":
- * Launch price: ₹99 (₹149 crossed out), valid till Tuesday 10 Nov 23:59:59 IST.
- * Switches to ₹149 automatically on Wednesday 11 Nov 00:00:00 IST.
+ * Launch price: ₹99 (₹149 regular), valid till Sunday 22 Nov 23:59:59 IST.
+ * Switches to ₹149 automatically on Monday 23 Nov 00:00:00 IST.
  *
  * HOW TO CHANGE MANUALLY:
- * - To extend: Change the date below (e.g. '2026-11-15T00:00:00+05:30').
+ * - To extend: Change the date below (e.g. '2026-11-25T00:00:00+05:30').
  * - To change regular or launch price: Edit PRODUCTS.PICTURE_GUIDE above.
  */
-const PICTURE_DISCOUNT_CUTOFF = new Date('2026-11-11T00:00:00+05:30').getTime();
+const PICTURE_DISCOUNT_CUTOFF = new Date('2026-11-23T00:00:00+05:30').getTime();
 
 export function isPictureDiscountActive() {
   return Date.now() < PICTURE_DISCOUNT_CUTOFF;
@@ -89,7 +89,7 @@ function updatePicturePricingUI() {
   if (badge) {
     if (isDiscount) {
       badge.style.display = 'inline-block';
-      badge.innerText = 'Launch Price · Limited Time Offer';
+      badge.innerText = 'Launch Price · Valid till 22 Nov';
     } else {
       badge.style.display = 'none';
     }
